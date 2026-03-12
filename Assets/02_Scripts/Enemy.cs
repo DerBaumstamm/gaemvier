@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour
 {
     public UnityEvent<int> onHealthChanged;
     [SerializeField] private GameObject uiPrefab;
-    [SerializeField] private int health = 10;
+    [SerializeField] public int health = 10;
 
     void Awake()
     {
