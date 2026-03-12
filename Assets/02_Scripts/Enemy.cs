@@ -9,5 +9,12 @@ public class Enemy : MonoBehaviour
         get => troopCount;
         set => troopCount = value;
     }
+
+    
+    
+    public int enemyIndex;
 }
+
+
+
 

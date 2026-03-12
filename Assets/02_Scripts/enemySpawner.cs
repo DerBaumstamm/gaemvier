@@ -44,7 +44,9 @@ public class enemySpawner : MonoBehaviour
         
         Vector3 spawnPosition = new Vector3(x, 5, randomZ);
         GameObject spawnedEnemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-        
+        Enemy enemyData = spawnedEnemy.AddComponent<Enemy>(); //Speichert Index bei Enemy.cs
+        enemyData.enemyIndex = randomEnemyIndex; 
+        spawnedEnemy.tag = "Enemy";
         if(spawnedEnemy.GetComponent<Rigidbody>() == null)
         {
             spawnedEnemy.AddComponent<Rigidbody>();

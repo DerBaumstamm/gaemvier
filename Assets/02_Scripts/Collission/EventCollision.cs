@@ -10,6 +10,10 @@ public class EventCollision : MonoBehaviour
         print($"Collision detected with: {collision.gameObject.name}");
         if (collision.gameObject.CompareTag("Enemy"))
         {
+            Enemy enemyData = collision.gameObject.GetComponent<Enemy>();
+            int index = enemyData.enemyIndex;
+        
+            Debug.Log($"Enemy Index: {index}");
             OnEnemyCollision?.Invoke();
             Debug.Log("Spieler hat Enemy getroffen!");
         }
