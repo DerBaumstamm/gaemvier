@@ -3,27 +3,27 @@ using TMPro;
 
 public class ScoreUI : MonoBehaviour
 {
-    private TMP_Text scoreText;
-    private TestPlayer player;
+    [SerializeField] private TMP_Text scoreText;
+    [SerializeField] private Enemy enemy;
 
     void Awake()
     {
         scoreText = GetComponentInChildren<TMP_Text>();
-        player = GetComponentInParent<TestPlayer>();
+        enemy = GetComponentInParent<Enemy>();
     }
 
     private void OnEnable()
     {
-        player?.onScoreChanged.AddListener(UpdateScore);
+        enemy?.onHealthChanged.AddListener(UpdateScore);
     }
 
     private void OnDisable()
     {
-        player?.onScoreChanged.RemoveListener(UpdateScore);
+        enemy?.onHealthChanged.RemoveListener(UpdateScore);
     }
 
-    private void UpdateScore(int score)
+    private void UpdateScore(int health)
     {
-        scoreText.text = score.ToString();
+        scoreText.text = health.ToString();
     }
 }

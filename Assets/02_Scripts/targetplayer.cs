@@ -14,6 +14,7 @@ public class targetplayer : MonoBehaviour
         TryAssignPlayer();
     }
 
+
     private void Update()
     {
         if (Time.frameCount % 30 == 0)
@@ -39,6 +40,7 @@ public class targetplayer : MonoBehaviour
 
     private void TryAssignPlayer()
     {
+        
         if (cachedPlayer == null)
         {
             GameObject p = GameObject.FindWithTag("Player");
@@ -47,5 +49,6 @@ public class targetplayer : MonoBehaviour
 
         player = cachedPlayer;
     }
+
 }
 
