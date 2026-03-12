@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Multiplikator : MonoBehaviour
 {
+    /*
     [SerializeField] private GateEventPublisher publisher;
     [SerializeField] private int troopCount = 10;
 
@@ -27,4 +28,5 @@ public class Multiplikator : MonoBehaviour
     {
         troopCount += value;
     }
+    */
 }
