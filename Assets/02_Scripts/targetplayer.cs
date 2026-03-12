@@ -28,13 +28,7 @@ public class targetplayer : MonoBehaviour
             transform.LookAt(player);
             transform.position += transform.forward * moveSpeed * Time.deltaTime;
         }
-
-        if (distance <= minDist)
-        {
-            Rigidbody rb = GetComponent<Rigidbody>();
-            if (rb != null) rb.linearVelocity = Vector3.zero;
-            transform.position = new Vector3(transform.position.x, -100f, transform.position.z);
-        }
+        
     }
 
     private void TryAssignPlayer()
