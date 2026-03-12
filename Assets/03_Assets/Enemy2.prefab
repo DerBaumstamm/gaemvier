@@ -12,7 +12,9 @@ GameObject:
   - component: {fileID: 5603734717921658104}
   - component: {fileID: 8221161902393236393}
   - component: {fileID: 4579548102987192561}
+  - component: {fileID: 8677314750933252833}
   - component: {fileID: -3451723462633793063}
+  - component: {fileID: -5453524106599516573}
   m_Layer: 0
   m_Name: Enemy2
   m_TagString: Enemy
@@ -115,6 +117,33 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!54 &8677314750933252833
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5049270148046760105}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!114 &-3451723462633793063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,3 +161,16 @@ MonoBehaviour:
       m_Calls: []
   uiPrefab: {fileID: 1876016818750666583, guid: f25c0cb3d90684d45803ca7859b15b9c, type: 3}
   health: 10
+--- !u!114 &-5453524106599516573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5049270148046760105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3db7436dfb5e1d649b535f76e101cebb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
+  speed: 5

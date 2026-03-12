@@ -317,6 +317,11 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1 &954355060 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3915568713809795123, guid: a717741581258cb49be45019ceaf0f28, type: 3}
+  m_PrefabInstance: {fileID: 1773869443}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1728088418
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,12 +366,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0067985475f09014389adbb5bd370d6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  groundPlane: {fileID: 0}
-  enemies: []
+  groundPlane: {fileID: 954355060}
+  enemies:
+  - {fileID: 451039752325345422, guid: f491e98b8f3c4e14381cce59a7320927, type: 3}
+  - {fileID: 5049270148046760105, guid: 5316b0483e61b1d4cbfcd353c76d2897, type: 3}
+  - {fileID: 2918873534608508506, guid: af38977c354272e4a9e79fb646da40a8, type: 3}
   gates: {fileID: 3942429263798651881, guid: 34d52152dcbfd71448705f464b749dbc, type: 3}
   spawnDelayEnemy: 3
   spawnDelayGate: 7
-  spawnHeight: 5
+  spawnHeight: 1
   healthMultiplier: 2
 --- !u!1001 &1773869443
 PrefabInstance:

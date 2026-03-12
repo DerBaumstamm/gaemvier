@@ -8,7 +8,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private GameObject gates;
     [SerializeField] private float spawnDelayEnemy = 3f;
     [SerializeField] private float spawnDelayGate = 7f;
-    [SerializeField] private float spawnHeight = 5f;
+    [SerializeField] private float spawnHeight = 1f;
     [SerializeField] private int healthMultiplier = 2;
     private float width;
 
@@ -88,7 +88,7 @@ public class EnemySpawner : MonoBehaviour
 
         
 
-        Vector3 leftGatePos = new Vector3(groundX, 5, groundZ - gateOffset);
+        Vector3 leftGatePos = new Vector3(groundX, spawnHeight, groundZ - gateOffset);
         GameObject leftGate = Instantiate(gates, leftGatePos, gateRotation);
         leftGate.tag = "Gate";
         if (!leftGate.GetComponent<Rigidbody>())
@@ -99,7 +99,7 @@ public class EnemySpawner : MonoBehaviour
         leftInfo.value = Random.Range(1, 10);
         leftInfo.op = operators[Random.Range(0, operators.Length)];
 
-        Vector3 rightGatePos = new Vector3(groundX, 5, groundZ + gateOffset);
+        Vector3 rightGatePos = new Vector3(groundX, spawnHeight, groundZ + gateOffset);
         GameObject rightGate = Instantiate(gates, rightGatePos, gateRotation);
         rightGate.tag = "Gate";
         if (!rightGate.GetComponent<Rigidbody>())
