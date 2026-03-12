@@ -130,5 +130,5 @@ MonoBehaviour:
   onHealthChanged:
     m_PersistentCalls:
       m_Calls: []
-  uiPrefab: {fileID: 8466092934304680279, guid: a6ff595d2dd636544aa04826f294e728, type: 3}
+  uiPrefab: {fileID: 1876016818750666583, guid: f25c0cb3d90684d45803ca7859b15b9c, type: 3}
   health: 10

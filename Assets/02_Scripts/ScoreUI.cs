@@ -3,12 +3,12 @@ using TMPro;
 
 public class ScoreUI : MonoBehaviour
 {
-    [SerializeField] private TMP_Text scoreText;
     [SerializeField] private Enemy enemy;
+    [SerializeField] private TextMeshPro tmpro;
 
     void Awake()
     {
-        scoreText = GetComponentInChildren<TMP_Text>();
+        tmpro = GetComponent<TextMeshPro>();
         enemy = GetComponentInParent<Enemy>();
     }
 
@@ -24,6 +24,6 @@ public class ScoreUI : MonoBehaviour
 
     private void UpdateScore(int health)
     {
-        scoreText.text = health.ToString();
+        tmpro.text = health.ToString();
     }
 }
