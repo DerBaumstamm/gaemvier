@@ -8,6 +8,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private GameObject gates;
     [SerializeField] private float spawnDelayEnemy = 3f;
     [SerializeField] private float spawnDelayGate = 7f;
+    [SerializeField] private float spawnHeight = 1.5f;
     
     private float width;
 

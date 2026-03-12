@@ -119,6 +119,72 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &55440757 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3915568713809795123, guid: a717741581258cb49be45019ceaf0f28, type: 3}
+  m_PrefabInstance: {fileID: 1773869443}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &64549757
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2245168896521578120, guid: b8ef5880fc7000f44a9bd828b8d39417, type: 3}
+      propertyPath: m_Constraints
+      value: 114
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509106102762633561, guid: b8ef5880fc7000f44a9bd828b8d39417, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509106102762633561, guid: b8ef5880fc7000f44a9bd828b8d39417, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509106102762633561, guid: b8ef5880fc7000f44a9bd828b8d39417, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509106102762633561, guid: b8ef5880fc7000f44a9bd828b8d39417, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509106102762633561, guid: b8ef5880fc7000f44a9bd828b8d39417, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509106102762633561, guid: b8ef5880fc7000f44a9bd828b8d39417, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509106102762633561, guid: b8ef5880fc7000f44a9bd828b8d39417, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509106102762633561, guid: b8ef5880fc7000f44a9bd828b8d39417, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509106102762633561, guid: b8ef5880fc7000f44a9bd828b8d39417, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509106102762633561, guid: b8ef5880fc7000f44a9bd828b8d39417, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8295816066480641336, guid: b8ef5880fc7000f44a9bd828b8d39417, type: 3}
+      propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b8ef5880fc7000f44a9bd828b8d39417, type: 3}
 --- !u!1 &570586479
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,13 +271,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 570586479}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.009687676, y: 0.7070404, z: -0.009687676, w: 0.7070404}
+  m_LocalPosition: {x: -60, y: 5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 1.57, y: 90, z: 0}
 --- !u!114 &570586483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -299,13 +365,15 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0067985475f09014389adbb5bd370d6e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: '::'
-  groundPlane: {fileID: 3915568713809795123, guid: a717741581258cb49be45019ceaf0f28, type: 3}
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
+  groundPlane: {fileID: 55440757}
   enemies:
   - {fileID: 451039752325345422, guid: f491e98b8f3c4e14381cce59a7320927, type: 3}
   - {fileID: 5049270148046760105, guid: 5316b0483e61b1d4cbfcd353c76d2897, type: 3}
   - {fileID: 2918873534608508506, guid: af38977c354272e4a9e79fb646da40a8, type: 3}
-  spawnDelay: 3
+  gates: {fileID: 3942429263798651881, guid: 34d52152dcbfd71448705f464b749dbc, type: 3}
+  spawnDelayEnemy: 3
+  spawnDelayGate: 7
   spawnHeight: 1.5
 --- !u!1001 &1773869443
 PrefabInstance:
@@ -503,3 +571,4 @@ SceneRoots:
   - {fileID: 1776681312}
   - {fileID: 1728088419}
   - {fileID: 1773869443}
+  - {fileID: 64549757}

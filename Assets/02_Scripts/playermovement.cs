@@ -4,8 +4,8 @@ public class playermovement : MonoBehaviour
 {
 
     private Rigidbody _rb;
-    private Vector3 _left = Vector3.left;
-    private Vector3 _right = Vector3.right;
+    private Vector3 _left = Vector3.forward * 2;
+    private Vector3 _right = Vector3.back * 2;
     
     void Start()
     {
