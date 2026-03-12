@@ -8,13 +8,15 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private GameObject gates;
     [SerializeField] private float spawnDelayEnemy = 3f;
     [SerializeField] private float spawnDelayGate = 7f;
-    
+    [SerializeField] private float spawnHeight = 5f;
+    [SerializeField] private int healthMultiplier = 2;
     private float width;
 
 // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         StartCoroutine(SpawnLoop());
+        StartCoroutine(HealthMultiplyerLoop());
     }
     
     IEnumerator SpawnLoop()
@@ -28,7 +30,14 @@ public class EnemySpawner : MonoBehaviour
         }
     }
     
-    
+    IEnumerator HealthMultiplyerLoop()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(20f);
+            healthMultiplier ++;
+        }
+    }
     
     
     
@@ -48,6 +57,12 @@ public class EnemySpawner : MonoBehaviour
         Vector3 spawnPosition = new Vector3(x, spawnHeight, randomZ);
         GameObject spawnedEnemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
         
+        int health = Random.Range(1, 6) * healthMultiplier;
+        Enemy enemyHealth = spawnedEnemy.GetComponent<Enemy>();
+        if (enemyHealth == null)
+            enemyHealth = spawnedEnemy.AddComponent<Enemy>();
+        enemyHealth.health = health;
+        
         if(spawnedEnemy.GetComponent<Rigidbody>() == null)
         {
             spawnedEnemy.AddComponent<Rigidbody>();
@@ -66,19 +81,34 @@ public class EnemySpawner : MonoBehaviour
         float gateOffset = width / 4f;
         Quaternion gateRotation = Quaternion.Euler(0, 90, 0);
 
+        string[] operators = { "x", "+", "-", "/" };
+        int randomValue = Random.Range(1, 10);
+        string randomOperator = operators[Random.Range(0, operators.Length)];
+
+
+        
 
         Vector3 leftGatePos = new Vector3(groundX, 5, groundZ - gateOffset);
         GameObject leftGate = Instantiate(gates, leftGatePos, gateRotation);
         leftGate.tag = "Gate";
         if (!leftGate.GetComponent<Rigidbody>())
             leftGate.AddComponent<Rigidbody>();
+        
+        GateInfo leftInfo = leftGate.GetComponent<GateInfo>();
+        if (leftInfo == null) leftInfo = leftGate.AddComponent<GateInfo>();
+        leftInfo.value = Random.Range(1, 10);
+        leftInfo.op = operators[Random.Range(0, operators.Length)];
 
-        // Rechtes Gate
         Vector3 rightGatePos = new Vector3(groundX, 5, groundZ + gateOffset);
         GameObject rightGate = Instantiate(gates, rightGatePos, gateRotation);
         rightGate.tag = "Gate";
         if (!rightGate.GetComponent<Rigidbody>())
             rightGate.AddComponent<Rigidbody>();
+        
+        GateInfo rightInfo = rightGate.GetComponent<GateInfo>();
+        if (rightInfo == null) rightInfo = rightGate.AddComponent<GateInfo>();
+        rightInfo.value = Random.Range(1, 10);
+        rightInfo.op = operators[Random.Range(0, operators.Length)];
         
     }
     
