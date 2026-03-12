@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 8245729920921754508}
   - component: {fileID: 2277865531721616570}
   - component: {fileID: 8001653858904483356}
-  - component: {fileID: 4075886697223427247}
   - component: {fileID: 2245168896521578120}
+  - component: {fileID: 4075886697223427247}
+  - component: {fileID: 3376204372070359261}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -114,18 +115,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4075886697223427247
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8295816066480641336}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11a551e722ad04bd49c41708ac7d06cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::playermovement
 --- !u!54 &2245168896521578120
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -153,3 +142,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 120
   m_CollisionDetection: 0
+--- !u!114 &4075886697223427247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8295816066480641336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a551e722ad04bd49c41708ac7d06cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::playermovement
+--- !u!114 &3376204372070359261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8295816066480641336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0519f61624f79e945a5965b5f3b47c9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EventCollision
