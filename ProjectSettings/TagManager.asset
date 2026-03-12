@@ -4,8 +4,8 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Gate
   - Enemy
+  - Gate
   layers:
   - Default
   - TransparentFX
