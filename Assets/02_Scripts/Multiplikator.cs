@@ -6,7 +6,11 @@ public class Multiplikator : MonoBehaviour
     [SerializeField] private EventCollision eventCollision;
     [SerializeField] private Player player;
     [SerializeField] private Enemy enemy;
+    //[SerializeField] private GateEventPublisher publisher;
+    [SerializeField] private int troopCount = 10;
 
+    public int TroopCount => troopCount;
+    
     private void OnEnable()
     {
         if (eventCollision == null) return;
@@ -45,4 +49,10 @@ public class Multiplikator : MonoBehaviour
             eventCollision.OnEnemyCollision -= HandleEnemyCollision;
         }
     }
+
+    private void OnGateEnter(int value)
+    {
+        troopCount += value;
+    }
+    
 }
