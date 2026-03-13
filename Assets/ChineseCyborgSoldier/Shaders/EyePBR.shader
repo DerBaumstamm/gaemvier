@@ -7,16 +7,16 @@ Shader "Custom/Eye"
         _PupilColor("Pupil Color", Color) = (1,1,1,1)
         _PupilEmission("Pupil Emission", Float) = 1
 
-        _Pupil("Pupil", 2D) = "white"{}        
+        _Pupil("Pupil", 2D) = "white"{}
         _PupilScale("Pupil Scale", Float) = 0.5
         _PupilSize("Pupil Size", Range(0, 0.5)) = 0.5
         _IOR_AirDivInternal("IOR_Air / IOR_Internal", Float) = 0.77
-        
+
         _IrisMask("Iris Mask", 2D) = "white"{}
 
         _OffsetMul("Offset Multiplier", Float) = 0.5
 
-        _IrisRadius("Iris Radius", Float) = 0.5        
+        _IrisRadius("Iris Radius", Float) = 0.5
 
         _EyeCornerColor("EyeCornerColor", Color) = (1,0,0,1)
         _EyeCornerPow("EyeCornerPow", Float) = 0.15
@@ -36,7 +36,7 @@ Shader "Custom/Eye"
         _EmissionMap("Emission Map",2D) = "black"{}
         [HDR]_EmissionColor("Emission Color", Color) = (1,1,1,1)
 
-        
+
         _SkyBoxCubeMap("SkyBox", Cube) = ""{}
 
         _EnvRotation("EnvRotation",Range(0.0,360.0)) = 0.0
@@ -47,27 +47,33 @@ Shader "Custom/Eye"
         [Toggle(_IBL_OFF)] _IBL_OFF("IBL OFF",Float) = 0.0
     }
 
-        SubShader
+    SubShader
+    {
+        Tags
         {
-            Tags{"RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" "UniversalMaterialType" = "Lit" "IgnoreProjector" = "True" "ShaderModel" = "4.5"}
-            LOD 300
+            "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" "UniversalMaterialType" = "Lit" "IgnoreProjector" = "True" "ShaderModel" = "4.5"
+        }
+        LOD 300
 
-            // ------------------------------------------------------------------
-            //  Forward pass. Shades all light in a single pass. GI + emission + Fog
-            Pass
+        // ------------------------------------------------------------------
+        //  Forward pass. Shades all light in a single pass. GI + emission + Fog
+        Pass
+        {
+            // Lightmode matches the ShaderPassName set in UniversalRenderPipeline.cs. SRPDefaultUnlit and passes with
+            // no LightMode tag are also rendered by Universal Render Pipeline
+            Tags
             {
-                // Lightmode matches the ShaderPassName set in UniversalRenderPipeline.cs. SRPDefaultUnlit and passes with
-                // no LightMode tag are also rendered by Universal Render Pipeline
-                Tags{"LightMode" = "UniversalForward"}
+                "LightMode" = "UniversalForward"
+            }
 
-                //Blend [_SrcBlend][_DstBlend]
-                ZWrite on
-                Blend One Zero
-                Cull off
+            //Blend [_SrcBlend][_DstBlend]
+            ZWrite on
+            Blend One Zero
+            Cull off
 
-                HLSLPROGRAM
-                #pragma exclude_renderers gles gles3 glcore
-                #pragma target 4.5
+            HLSLPROGRAM
+            #pragma exclude_renderers gles gles3 glcore
+            #pragma target 4.5
 
             // -------------------------------------
             // Material Keywords            
@@ -86,7 +92,7 @@ Shader "Custom/Eye"
             #pragma multi_compile_fragment _ _REFLECTION_PROBE_BOX_PROJECTION
             #pragma multi_compile_fragment _ _SHADOWS_SOFT
             #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
-            
+
 
             //--------------------------------------
             // GPU Instancing
@@ -100,7 +106,7 @@ Shader "Custom/Eye"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
             #include "Eye_Include.hlsl"
-            
+
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseMap_ST;
                 half4 _BaseColor;
@@ -110,7 +116,7 @@ Shader "Custom/Eye"
                 half _OcclusionStrength;
 
                 half _EnvRotation;
-                float4 _EmissionColor;            
+                float4 _EmissionColor;
 
                 float _PupilScale;
                 float _PupilSize;
@@ -128,13 +134,19 @@ Shader "Custom/Eye"
 
                 float _PupilEmission;
             CBUFFER_END
-            
-            TEXTURE2D(_BaseMap);         SAMPLER(sampler_BaseMap);
-            TEXTURE2D(_MetallicMap);     SAMPLER(sampler_MetallicMap);
-            TEXTURE2D(_RoughnessMap);    SAMPLER(sampler_RoughnessMap);
-            TEXTURE2D(_NormalMap);       SAMPLER(sampler_NormalMap);
-            TEXTURE2D(_OcclusionMap);    SAMPLER(sampler_OcclusionMap);
-            TEXTURE2D(_EmissionMap);     SAMPLER(sampler_EmissionMap);            
+
+            TEXTURE2D(_BaseMap);
+            SAMPLER(sampler_BaseMap);
+            TEXTURE2D(_MetallicMap);
+            SAMPLER(sampler_MetallicMap);
+            TEXTURE2D(_RoughnessMap);
+            SAMPLER(sampler_RoughnessMap);
+            TEXTURE2D(_NormalMap);
+            SAMPLER(sampler_NormalMap);
+            TEXTURE2D(_OcclusionMap);
+            SAMPLER(sampler_OcclusionMap);
+            TEXTURE2D(_EmissionMap);
+            SAMPLER(sampler_EmissionMap);
 
             TEXTURE2D(_CameraOpaqueTexture);
             SAMPLER(sampler_CameraOpaqueTexture);
@@ -145,25 +157,25 @@ Shader "Custom/Eye"
             TEXTURECUBE(_SkyBoxCubeMap);
             SAMPLER(sampler_SkyBoxCubeMap);
 
-            
+
             struct Attributes
             {
-                float4 positionOS   : POSITION;
-                float3 normalOS     : NORMAL;
-                float4 tangentOS    : TANGENT;
-                float2 texcoord     : TEXCOORD0;
+                float4 positionOS : POSITION;
+                float3 normalOS : NORMAL;
+                float4 tangentOS : TANGENT;
+                float2 texcoord : TEXCOORD0;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct Varyings
             {
-                float2 uv           : TEXCOORD0;
-                float4 positionOS   : TEXCOORD1;
-                float3 positionWS   : TEXCOORD2;
-                float3 normalWS     : TEXCOORD3;
-                half4  tangentWS    : TEXCOORD4;    // xyz: tangent, w: sign
-                float4 shadowCoord  : TEXCOORD5;
-                float4 positionCS   : SV_POSITION;                
+                float2 uv : TEXCOORD0;
+                float4 positionOS : TEXCOORD1;
+                float3 positionWS : TEXCOORD2;
+                float3 normalWS : TEXCOORD3;
+                half4 tangentWS : TEXCOORD4; // xyz: tangent, w: sign
+                float4 shadowCoord : TEXCOORD5;
+                float4 positionCS : SV_POSITION;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -194,7 +206,6 @@ Shader "Custom/Eye"
                 return o;
             }
 
-            
 
             void LightDataInitialization(Varyings i, out lightDatas o)
             {
@@ -215,36 +226,37 @@ Shader "Custom/Eye"
                 return -normalize((w - k) * normalWS - _IOR_AirDivInternal * viewWS);
             }
 
-            half3 SurfaceDataInitialization(Varyings i, out surfaceDatas o, half3 V, half3 Tan, half3 Bitan, half3 N, inout half3 emissionColor)
+            half3 SurfaceDataInitialization(Varyings i, out surfaceDatas o, half3 V, half3 Tan, half3 Bitan, half3 N,
+                                       inout half3 emissionColor)
             {
                 o = (surfaceDatas)0;
                 half4 color;
 
                 half dis = length(half2(0.5, 0.5) - i.uv);
-                
+
 
                 float4 normalTS = normalize(SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, i.uv));
                 o.normalTS = UnpackNormalScale(normalTS, _Normal);
 
                 half3x3 TBN = half3x3(Tan, Bitan, N);
                 half3 normal = normalize(mul(o.normalTS, TBN));
-               
-                half2 halfuv = half2(0.5, 0.5);                              
+
+                half2 halfuv = half2(0.5, 0.5);
 
                 if (length(halfuv - i.uv) < _IrisRadius)
                 {
-                    half2 pupilUV = pow((i.uv - halfuv) / _PupilScale, 1)+ halfuv;
+                    half2 pupilUV = pow((i.uv - halfuv) / _PupilScale, 1) + halfuv;
 
                     // physically based refraction------------------------------------------
 
-                    half3 refractedW = RefractedViewDir(normal,V);
+                    half3 refractedW = RefractedViewDir(normal, V);
                     half cosAlpha = dot(normal, -refractedW);
                     half height = saturate(1 - (pow((pupilUV - halfuv).x, 2) + pow((pupilUV - halfuv).y, 2)) * 4);
                     half dist = height / cosAlpha;
-                    half4 offsetW = half4(dist * refractedW,0);
-                    
+                    half4 offsetW = half4(dist * refractedW, 0);
+
                     half2 offsetL = mul((float4x4)LocalToWorldMatrix_Inverse, offsetW).xy;
-                    
+
                     _OffsetMul *= ScaleMul;
                     pupilUV += half2(_OffsetMul * offsetL.x, -_OffsetMul * offsetL.y);
 
@@ -272,10 +284,10 @@ Shader "Custom/Eye"
                 o.metallic = saturate(metallic);
                 half roughness = SAMPLE_TEXTURE2D(_RoughnessMap, sampler_RoughnessMap, i.uv).r * _Roughness;
                 o.roughness = max(saturate(roughness), 0.001f);
-                half smoothness= SAMPLE_TEXTURE2D(_MetallicMap, sampler_MetallicMap, i.uv).a * _Metallic;
-                o.roughness = max(saturate((1 - smoothness)* (1 - smoothness)), 0.001f);
-             
-                
+                half smoothness = SAMPLE_TEXTURE2D(_MetallicMap, sampler_MetallicMap, i.uv).a * _Metallic;
+                o.roughness = max(saturate((1 - smoothness) * (1 - smoothness)), 0.001f);
+
+
                 //occlusion
                 half occlusion = SAMPLE_TEXTURE2D(_OcclusionMap, sampler_OcclusionMap, i.uv).r;
                 o.occlusion = lerp(1.0, occlusion, _OcclusionStrength);
@@ -293,20 +305,24 @@ Shader "Custom/Eye"
 
                 half3 emission = 0;
 
-                _lightDatas.N = SurfaceDataInitialization(i, _surfaceDatas, _lightDatas.V, _lightDatas.T, _lightDatas.B, _lightDatas.N, emission);
+                _lightDatas.N = SurfaceDataInitialization(i, _surfaceDatas, _lightDatas.V, _lightDatas.T, _lightDatas.B,
+     _lightDatas.N, emission);
 
-                float4 litRes = StandardLit(_lightDatas, _surfaceDatas, i.positionWS, i.shadowCoord, _EnvRotation) + float4(emission * _PupilEmission, 1);
+                float4 litRes = StandardLit(_lightDatas, _surfaceDatas, i.positionWS, i.shadowCoord, _EnvRotation) +
+                    float4(emission * _PupilEmission, 1);
 
                 return litRes;
-            }                        
-
+            }
             ENDHLSL
         }
 
         Pass
         {
             Name "ShadowCaster"
-            Tags{"LightMode" = "ShadowCaster"}
+            Tags
+            {
+                "LightMode" = "ShadowCaster"
+            }
 
             ZWrite On
             ZTest LEqual
@@ -344,7 +360,10 @@ Shader "Custom/Eye"
         Pass
         {
             Name "DepthOnly"
-            Tags{"LightMode" = "DepthOnly"}
+            Tags
+            {
+                "LightMode" = "DepthOnly"
+            }
 
             ZWrite On
             ColorMask 0
@@ -372,21 +391,24 @@ Shader "Custom/Eye"
             ENDHLSL
         }
 
-            // This pass is used when drawing to a _CameraNormalsTexture texture
-            Pass
+        // This pass is used when drawing to a _CameraNormalsTexture texture
+        Pass
+        {
+            Name "DepthNormals"
+            Tags
             {
-                Name "DepthNormals"
-                Tags{"LightMode" = "DepthNormals"}
+                "LightMode" = "DepthNormals"
+            }
 
-                ZWrite On
-                Cull[_Cull]
+            ZWrite On
+            Cull[_Cull]
 
-                HLSLPROGRAM
-                #pragma exclude_renderers gles gles3 glcore
-                #pragma target 4.5
+            HLSLPROGRAM
+            #pragma exclude_renderers gles gles3 glcore
+            #pragma target 4.5
 
-                #pragma vertex DepthNormalsVertex
-                #pragma fragment DepthNormalsFragment
+            #pragma vertex DepthNormalsVertex
+            #pragma fragment DepthNormalsFragment
 
             // -------------------------------------
             // Material Keywords
@@ -405,5 +427,5 @@ Shader "Custom/Eye"
             #include "Packages/com.unity.render-pipelines.universal/Shaders/LitDepthNormalsPass.hlsl"
             ENDHLSL
         }
-        }
+    }
 }

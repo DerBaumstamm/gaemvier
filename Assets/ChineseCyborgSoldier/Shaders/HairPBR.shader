@@ -31,7 +31,7 @@ Shader "Custom/HairPBR"
         _EmissionMap("Emission Map",2D) = "black"{}
         _EmissionColor("Emission Color", Color) = (1,1,1,1)
 
-        
+
         _SkyBoxCubeMap("SkyBox", Cube) = ""{}
 
         _EnvRotation("EnvRotation",Range(0.0,360.0)) = 0.0
@@ -42,27 +42,33 @@ Shader "Custom/HairPBR"
         [Toggle(_IBL_OFF)] _IBL_OFF("IBL OFF",Float) = 0.0
     }
 
-        SubShader
+    SubShader
+    {
+        Tags
         {
-            Tags{"RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" "UniversalMaterialType" = "Lit" }
-            LOD 300
+            "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" "UniversalMaterialType" = "Lit"
+        }
+        LOD 300
 
-            // ------------------------------------------------------------------
-            //  Forward pass. Shades all light in a single pass. GI + emission + Fog
-            Pass
+        // ------------------------------------------------------------------
+        //  Forward pass. Shades all light in a single pass. GI + emission + Fog
+        Pass
+        {
+            // Lightmode matches the ShaderPassName set in UniversalRenderPipeline.cs. SRPDefaultUnlit and passes with
+            // no LightMode tag are also rendered by Universal Render Pipeline
+            Tags
             {
-                // Lightmode matches the ShaderPassName set in UniversalRenderPipeline.cs. SRPDefaultUnlit and passes with
-                // no LightMode tag are also rendered by Universal Render Pipeline
-                Tags{"LightMode" = "UniversalForward"}
+                "LightMode" = "UniversalForward"
+            }
 
-                //Blend [_SrcBlend][_DstBlend]
-                ZWrite on
-                Blend one zero
-                Cull Back
+            //Blend [_SrcBlend][_DstBlend]
+            ZWrite on
+            Blend one zero
+            Cull Back
 
-                HLSLPROGRAM
-                #pragma exclude_renderers gles gles3 glcore
-                #pragma target 4.5
+            HLSLPROGRAM
+            #pragma exclude_renderers gles gles3 glcore
+            #pragma target 4.5
 
             // -------------------------------------
             // Material Keywords
@@ -81,7 +87,7 @@ Shader "Custom/HairPBR"
             #pragma multi_compile_fragment _ _REFLECTION_PROBE_BOX_PROJECTION
             #pragma multi_compile_fragment _ _SHADOWS_SOFT
             #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
-            
+
 
             //--------------------------------------
             // GPU Instancing
@@ -93,8 +99,8 @@ Shader "Custom/HairPBR"
             #pragma fragment frag
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
-            
-            
+
+
             // NOTE: Do not ifdef the properties here as SRP batcher can not handle different layouts.
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseMap_ST;
@@ -120,16 +126,24 @@ Shader "Custom/HairPBR"
                 float _HairSpecular1;
                 float _HairSpecPow1;
             CBUFFER_END
+
             #include "hairPbrLitInclude.hlsl"
-            
-            TEXTURE2D(_BaseMap);         SAMPLER(sampler_BaseMap);
-            TEXTURE2D(_MetallicMap);     SAMPLER(sampler_MetallicMap);
-            TEXTURE2D(_RoughnessMap);    SAMPLER(sampler_RoughnessMap);
-            TEXTURE2D(_Normal_Map);       SAMPLER(sampler_Normal_Map);
-            TEXTURE2D(_OcclusionMap);    SAMPLER(sampler_OcclusionMap);
-            TEXTURE2D(_EmissionMap);     SAMPLER(sampler_EmissionMap);
-            TEXTURE2D(_Mask);            SAMPLER(sampler_Mask);
-            
+
+            TEXTURE2D(_BaseMap);
+            SAMPLER(sampler_BaseMap);
+            TEXTURE2D(_MetallicMap);
+            SAMPLER(sampler_MetallicMap);
+            TEXTURE2D(_RoughnessMap);
+            SAMPLER(sampler_RoughnessMap);
+            TEXTURE2D(_Normal_Map);
+            SAMPLER(sampler_Normal_Map);
+            TEXTURE2D(_OcclusionMap);
+            SAMPLER(sampler_OcclusionMap);
+            TEXTURE2D(_EmissionMap);
+            SAMPLER(sampler_EmissionMap);
+            TEXTURE2D(_Mask);
+            SAMPLER(sampler_Mask);
+
             TEXTURE2D(_CameraOpaqueTexture);
             SAMPLER(sampler_CameraOpaqueTexture);
 
@@ -138,25 +152,25 @@ Shader "Custom/HairPBR"
 
             TEXTURECUBE(_SkyBoxCubeMap);
             SAMPLER(sampler_SkyBoxCubeMap);
-            
+
             struct Attributes
             {
-                float4 positionOS   : POSITION;
-                float3 normalOS     : NORMAL;
-                float4 tangentOS    : TANGENT;
-                float2 texcoord     : TEXCOORD0;
+                float4 positionOS : POSITION;
+                float3 normalOS : NORMAL;
+                float4 tangentOS : TANGENT;
+                float2 texcoord : TEXCOORD0;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct Varyings
             {
-                float2 uv           : TEXCOORD0;
-                float4 positionOS   : TEXCOORD1;
-                float3 positionWS   : TEXCOORD2;
-                float3 normalWS     : TEXCOORD3;
-                half4  tangentWS    : TEXCOORD4;    // xyz: tangent, w: sign
-                float4 shadowCoord  : TEXCOORD5;
-                float4 positionCS   : SV_POSITION;                
+                float2 uv : TEXCOORD0;
+                float4 positionOS : TEXCOORD1;
+                float3 positionWS : TEXCOORD2;
+                float3 normalWS : TEXCOORD3;
+                half4 tangentWS : TEXCOORD4; // xyz: tangent, w: sign
+                float4 shadowCoord : TEXCOORD5;
+                float4 positionCS : SV_POSITION;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -187,7 +201,6 @@ Shader "Custom/HairPBR"
                 return o;
             }
 
-            
 
             void LightDataInitialization(Varyings i, out lightDatas o)
             {
@@ -207,10 +220,10 @@ Shader "Custom/HairPBR"
                 half4 color = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, i.uv) * _BaseColor;
 
                 //albedo & alpha & specular
-                o.albedo = color.rgb;                
-#if defined(_ALPHATEST_ON)
+                o.albedo = color.rgb;
+                #if defined(_ALPHATEST_ON)
                 clip(o.alpha - _Cutoff);
-#endif
+                #endif
                 o.specular = (half3)0;
                 //o.specular = 
 
@@ -219,8 +232,8 @@ Shader "Custom/HairPBR"
                 o.metallic = saturate(metallic);
                 half roughness = SAMPLE_TEXTURE2D(_RoughnessMap, sampler_RoughnessMap, i.uv).r * _Roughness;
                 o.roughness = max(saturate(roughness), 0.001f);
-                half smoothness= SAMPLE_TEXTURE2D(_MetallicMap, sampler_MetallicMap, i.uv).a * _Metallic;
-                o.roughness = max(saturate((1 - smoothness)* (1 - smoothness)), 0.001f);
+                half smoothness = SAMPLE_TEXTURE2D(_MetallicMap, sampler_MetallicMap, i.uv).a * _Metallic;
+                o.roughness = max(saturate((1 - smoothness) * (1 - smoothness)), 0.001f);
 
                 //normalTS (tangent Space)
                 float4 normalTS = SAMPLE_TEXTURE2D(_Normal_Map, sampler_Normal_Map, i.uv);
@@ -241,19 +254,22 @@ Shader "Custom/HairPBR"
                 LightDataInitialization(i, _lightDatas);
                 SurfaceDataInitialization(i, _surfaceDatas);
 
-                float4 litRes = StandardLit(_lightDatas, _surfaceDatas, i.positionWS, i.shadowCoord, _EnvRotation) + float4(_EmissionColor * SAMPLE_TEXTURE2D(_EmissionMap, sampler_EmissionMap, i.uv).xyz, 1);
+                float4 litRes = StandardLit(_lightDatas, _surfaceDatas, i.positionWS, i.shadowCoord, _EnvRotation) +
+                    float4(_EmissionColor * SAMPLE_TEXTURE2D(_EmissionMap, sampler_EmissionMap, i.uv).xyz, 1);
 
-             
+
                 return litRes;
-            }                        
-
+            }
             ENDHLSL
         }
 
         Pass
         {
             Name "ShadowCaster"
-            Tags{"LightMode" = "ShadowCaster"}
+            Tags
+            {
+                "LightMode" = "ShadowCaster"
+            }
 
             ZWrite On
             ZTest LEqual
@@ -291,7 +307,10 @@ Shader "Custom/HairPBR"
         Pass
         {
             Name "DepthOnly"
-            Tags{"LightMode" = "DepthOnly"}
+            Tags
+            {
+                "LightMode" = "DepthOnly"
+            }
 
             ZWrite On
             ColorMask 0
@@ -319,21 +338,24 @@ Shader "Custom/HairPBR"
             ENDHLSL
         }
 
-            // This pass is used when drawing to a _CameraNormalsTexture texture
-            Pass
+        // This pass is used when drawing to a _CameraNormalsTexture texture
+        Pass
+        {
+            Name "DepthNormals"
+            Tags
             {
-                Name "DepthNormals"
-                Tags{"LightMode" = "DepthNormals"}
+                "LightMode" = "DepthNormals"
+            }
 
-                ZWrite On
-                Cull[_Cull]
+            ZWrite On
+            Cull[_Cull]
 
-                HLSLPROGRAM
-                #pragma exclude_renderers gles gles3 glcore
-                #pragma target 4.5
+            HLSLPROGRAM
+            #pragma exclude_renderers gles gles3 glcore
+            #pragma target 4.5
 
-                #pragma vertex DepthNormalsVertex
-                #pragma fragment DepthNormalsFragment
+            #pragma vertex DepthNormalsVertex
+            #pragma fragment DepthNormalsFragment
 
             // -------------------------------------
             // Material Keywords
@@ -352,5 +374,5 @@ Shader "Custom/HairPBR"
             #include "Packages/com.unity.render-pipelines.universal/Shaders/LitDepthNormalsPass.hlsl"
             ENDHLSL
         }
-        }
+    }
 }

@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+
 public class EventCollision : MonoBehaviour
 {
     public event Action OnEnemyCollision;
@@ -29,6 +30,20 @@ public class EventCollision : MonoBehaviour
             OnGateCollision?.Invoke(gateInfo.op, gateInfo.value);
             Debug.Log($"Gate-Event gesendet: {gateInfo.op}{gateInfo.value}");
         }
+    }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        print($"Collision detected with: {collision.gameObject.name}");
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Enemy enemyData = collision.gameObject.GetComponent<Enemy>();
+            int health = enemyData.health;
+
+            Debug.Log($"Enemy health: {health}");
+            OnEnemyCollision?.Invoke();
+            Debug.Log("Spieler hat Enemy getroffen!");
+        }
+        
     }
 }

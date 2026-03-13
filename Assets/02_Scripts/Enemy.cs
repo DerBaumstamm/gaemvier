@@ -7,7 +7,8 @@ public class Enemy : MonoBehaviour
     public UnityEvent<int> onHealthChanged;
     [SerializeField] private GameObject uiPrefab;
     [SerializeField] private int troopCount = 5;
-    public int enemyIndex;
+    public int health;
+
     public int TroopCount
     {
         get => troopCount;
@@ -35,5 +36,4 @@ public class Enemy : MonoBehaviour
             Instantiate(uiPrefab, transform);
         }
     }
-
 }

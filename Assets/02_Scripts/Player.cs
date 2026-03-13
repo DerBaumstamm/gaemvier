@@ -10,4 +10,3 @@ public class Player : MonoBehaviour
         set => troopCount = Mathf.Max(0, value);
     }
 }
-
