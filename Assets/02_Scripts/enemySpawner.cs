@@ -47,7 +47,7 @@ public class EnemySpawner : MonoBehaviour
         width = ren.bounds.size.z;
         int randomEnemyIndex = Random.Range(0, enemies.Length);
         GameObject enemyPrefab = enemies[randomEnemyIndex];
-        enemyPrefab.tag = "Enemy";
+        
         float x = groundPlane.transform.position.x;
         float y = spawnHeight;
         float minZ = groundPlane.transform.position.z - width / 2;
@@ -56,12 +56,16 @@ public class EnemySpawner : MonoBehaviour
         
         Vector3 spawnPosition = new Vector3(x, spawnHeight, randomZ);
         GameObject spawnedEnemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-        
+
+        Enemy enemyData = spawnedEnemy.AddComponent<Enemy>(); //Speichert Index bei Enemy.cs
+        enemyData.enemyIndex = randomEnemyIndex; 
+        enemyPrefab.tag = "Enemy";
+
         int health = Random.Range(1, 6) * healthMultiplier;
         Enemy enemyHealth = spawnedEnemy.GetComponent<Enemy>();
         if (enemyHealth == null)
             enemyHealth = spawnedEnemy.AddComponent<Enemy>();
-        enemyHealth.health = health;
+        enemyHealth.TroopCount = health;
         
         if(spawnedEnemy.GetComponent<Rigidbody>() == null)
         {

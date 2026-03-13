@@ -151,14 +151,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2918873534608508506}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a5c5ff0292b6cc438163b926994d438, type: 3}
+  m_Script: {fileID: 11500000, guid: 23f65a4f373b47d3807c94f8e17da553, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   onHealthChanged:
     m_PersistentCalls:
       m_Calls: []
   uiPrefab: {fileID: 1876016818750666583, guid: f25c0cb3d90684d45803ca7859b15b9c, type: 3}
-  health: 10
+  troopCount: 5
 --- !u!114 &2472964568979292112
 MonoBehaviour:
   m_ObjectHideFlags: 0
