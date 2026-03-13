@@ -9,20 +9,83 @@ public class Multiplikator : MonoBehaviour
     //[SerializeField] private GateEventPublisher publisher;
     [SerializeField] private int troopCount = 10;
 
-    public int TroopCount => troopCount;
-    
-    private void OnEnable()
+    public int TroopCount => player != null ? player.TroopCount : troopCount;
+
+    private void Awake()
     {
-        if (eventCollision == null) return;
-        eventCollision.OnGateCollision += HandleGateCollision;
-        eventCollision.OnEnemyCollision += HandleEnemyCollision;
+        if (eventCollision == null)
+        {
+            eventCollision = GetComponent<EventCollision>();
+        }
+
+        if (player == null)
+        {
+            player = GetComponent<Player>();
+        }
+
+        if (player != null)
+        {
+            troopCount = player.TroopCount;
+        }
     }
 
-    private void HandleGateCollision()
+    private void OnEnable()
     {
-        Debug.Log("Gate collision detected. Increasing troop count.");
-        player.TroopCount += 1;
-        Debug.Log("troop count: " + player.TroopCount);
+        if (eventCollision == null)
+        {
+            Debug.LogWarning("EventCollision ist nicht gesetzt, Gate-/Enemy-Events werden nicht abonniert.");
+            return;
+        }
+
+        eventCollision.OnGateCollision += HandleGateCollision;
+        eventCollision.OnEnemyCollision += HandleEnemyCollision;
+        Debug.Log("Multiplikator hat Gate-/Enemy-Events abonniert.");
+    }
+
+    public void HandleGateCollision(string op, int value)
+    {
+        if (player == null)
+        {
+            Debug.LogWarning("Kein Player in Multiplikator gesetzt.");
+            return;
+        }
+
+        int currentTroops = player.TroopCount;
+
+        switch (op)
+        {
+            case "+":
+                player.TroopCount = currentTroops + value;
+                Debug.LogWarning(player.TroopCount);
+                break;
+            case "-":
+                player.TroopCount = currentTroops - value;
+                Debug.LogWarning(player.TroopCount);
+
+                break;
+            case "x":
+            case "*":
+                player.TroopCount = currentTroops * value;
+                Debug.LogWarning(player.TroopCount);
+
+                break;
+            case "/":
+                if (value == 0)
+                {
+                    Debug.LogWarning("Gate-Operation '/' mit Value 0 ignoriert.");
+                    return;
+                }
+                player.TroopCount = currentTroops / value;
+                Debug.LogWarning(player.TroopCount);
+
+                break;
+            default:
+                Debug.LogWarning($"Unbekannter Gate-Operator '{op}'.");
+                return;
+        }
+
+        troopCount = player.TroopCount;
+        Debug.Log($"Gate collision detected. {currentTroops} {op} {value} = {player.TroopCount}");
     }
 
     private void HandleEnemyCollision()
@@ -49,10 +112,4 @@ public class Multiplikator : MonoBehaviour
             eventCollision.OnEnemyCollision -= HandleEnemyCollision;
         }
     }
-
-    private void OnGateEnter(int value)
-    {
-        troopCount += value;
-    }
-    
 }
