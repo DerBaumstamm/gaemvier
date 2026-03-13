@@ -500,6 +500,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1279483827858522446, guid: a717741581258cb49be45019ceaf0f28, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1279483827858522446, guid: a717741581258cb49be45019ceaf0f28, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: b6d657f92b14a2d42ab2a12999ebced5, type: 2}
+    - target: {fileID: 1279483827858522446, guid: a717741581258cb49be45019ceaf0f28, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: b6d657f92b14a2d42ab2a12999ebced5, type: 2}
     - target: {fileID: 3915568713809795123, guid: a717741581258cb49be45019ceaf0f28, type: 3}
       propertyPath: m_Name
       value: BasePlane
