@@ -440,6 +440,7 @@ MonoBehaviour:
   eventCollision: {fileID: 686768679}
   player: {fileID: 686768682}
   enemy: {fileID: 916389210}
+  troopCount: 10
 --- !u!114 &686768682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -452,7 +453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6336f1feeac42568bc8f5371ff58c00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  troopCount: 1
+  troopCount: 10
 --- !u!1 &916389204
 GameObject:
   m_ObjectHideFlags: 0
@@ -595,7 +596,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23f65a4f373b47d3807c94f8e17da553, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  onHealthChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  uiPrefab: {fileID: 0}
   troopCount: 5
+  enemyIndex: 0
 --- !u!1 &1235835441
 GameObject:
   m_ObjectHideFlags: 0
