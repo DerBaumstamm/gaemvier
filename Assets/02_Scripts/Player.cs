@@ -2,7 +2,10 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] private GameObject prefab;
     [SerializeField] private int troopCount = 1;
+
+    public GameObject Prefab => prefab;
 
     public int TroopCount
     {
@@ -10,3 +13,5 @@ public class Player : MonoBehaviour
         set => troopCount = Mathf.Max(0, value);
     }
 }
+
+
