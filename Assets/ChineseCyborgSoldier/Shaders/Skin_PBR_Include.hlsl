@@ -11,43 +11,48 @@
 #define kDielectricSpec half4(0.04, 0.04, 0.04, 1.0 - 0.04) // standard dielectric reflectivity coef at incident angle (= 4%)
 
 
+
 TEXTURE2D(_SSSLUT);
 SAMPLER(sampler_SSSLUT);
 TEXTURE2D(_Mask);
 SAMPLER(sampler_Mask);
 
 CUSTOM_NAMESPACE_START(Common)
-inline half Pow2(half x)
-{
-    return x * x;
-}
-inline half Pow4(half x)
-{
-    return x * x * x * x;
-}
-inline half Pow5(half x)
-{
-    return x * x * x * x * x;
-}
-inline half3 RotateDirection(half3 R, half degrees)
-{
-    float3 reflUVW = R;
-    half theta = degrees * PI / 180.0f;
-    half costha = cos(theta);
-    half sintha = sin(theta);
-    reflUVW = half3(reflUVW.x * costha - reflUVW.z * sintha, reflUVW.y, reflUVW.x * sintha + reflUVW.z * costha);
-    return reflUVW;
-}
+    inline half Pow2(half x)
+    {
+        return x * x;
+    }
+
+    inline half Pow4(half x)
+    {
+        return x * x * x * x;
+    }
+
+    inline half Pow5(half x)
+    {
+        return x * x * x * x * x;
+    }
+
+    inline half3 RotateDirection(half3 R, half degrees)
+    {
+        float3 reflUVW = R;
+        half theta = degrees * PI / 180.0f;
+        half costha = cos(theta);
+        half sintha = sin(theta);
+        reflUVW = half3(reflUVW.x * costha - reflUVW.z * sintha, reflUVW.y, reflUVW.x * sintha + reflUVW.z * costha);
+        return reflUVW;
+    }
+
 CUSTOM_NAMESPACE_CLOSE(Common)
 
 
 struct lightDatas
 {
     float3 positionWS;
-    half3  V; //ViewDirWS
-    half3  N; //NormalWS
-    half3  B; //BinormalWS
-    half3  T; //TangentWS
+    half3 V; //ViewDirWS
+    half3 N; //NormalWS
+    half3 B; //BinormalWS
+    half3 T; //TangentWS
     float2 screenUV;
 };
 
@@ -56,15 +61,15 @@ struct surfaceDatas
     half3 albedo;
     half3 specular;
     half3 normalTS;
-    half  metallic;
-    half  roughness;
-    half  occlusion;
-    half  alpha;
-    half  mask;
+    half metallic;
+    half roughness;
+    half occlusion;
+    half alpha;
+    half mask;
 };
 
 
-float GGXNormalDistribution(float roughness, float NdotH)       // D function
+float GGXNormalDistribution(float roughness, float NdotH) // D function
 {
     float roughnessSqr = roughness * roughness;
     float NdotHSqr = NdotH * NdotH;
@@ -125,12 +130,13 @@ float3 F_None(float3 SpecularColor)
 // [Schlick 1994, "An Inexpensive BRDF Model for Physically-Based Rendering"]
 float3 F_Schlick_UE5(float3 SpecularColor, float VoH)
 {
-    float Fc = Common.Pow5(1 - VoH);					// 1 sub, 3 mul
+    float Fc = Common.Pow5(1 - VoH); // 1 sub, 3 mul
     //return Fc + (1 - Fc) * SpecularColor;		// 1 add, 3 mad
 
     // Anything less than 2% is physically impossible and is instead considered to be shadowing
     return saturate(50.0 * SpecularColor.g) * Fc + (1 - Fc) * SpecularColor;
 }
+
 //-----------------------------------------------------------  F -------------------------------------------------------------------
 
 float Specularity(half NdotL, half NdotV, half NdotH, half LdotH, half VdotH, float roughness, float3 specular)
@@ -168,20 +174,21 @@ float3 standardBRDF(lightDatas lightDat, surfaceDatas surfDat, half3 L, half3 li
     half NdotH = saturate(dot(lightDat.N, H));
     half NdotV = saturate(abs(dot(lightDat.N, lightDat.V)) + 1e-5);
     half NdotL = saturate(dot(lightDat.N, L));
-    half VdotH = saturate(dot(lightDat.V, H));//LoH
+    half VdotH = saturate(dot(lightDat.V, H)); //LoH
     half LdotH = saturate(dot(H, L));
     float3 radiance = NdotL * lightCol * shadow;
 
     float3 diffuseTerm = surfDat.albedo * OneMinusReflectivityMetallicCustom(surfDat.metallic);
-#if defined(_DIFFUSE_OFF)
+    #if defined(_DIFFUSE_OFF)
     diffuseTerm = half3(0, 0, 0);
-#endif
+    #endif
 
-    float3 specularTerm = Specularity(NdotL, NdotV, NdotH, LdotH, VdotH, surfDat.roughness, surfDat.specular);//DirectBRDF_Specular(surfDat.roughness, NdotH, LdotH)* lerp(kDieletricSpec.rgb, surfDat.albedo, surfDat.metallic);// * surfDat.metallic;
+    float3 specularTerm = Specularity(NdotL, NdotV, NdotH, LdotH, VdotH, surfDat.roughness, surfDat.specular);
+    //DirectBRDF_Specular(surfDat.roughness, NdotH, LdotH)* lerp(kDieletricSpec.rgb, surfDat.albedo, surfDat.metallic);// * surfDat.metallic;
 
-#if defined(_SPECULAR_OFF)
+    #if defined(_SPECULAR_OFF)
     specularTerm = half3(0, 0, 0);
-#endif    
+    #endif
 
     return (diffuseTerm + specularTerm) * radiance;
 }
@@ -194,40 +201,40 @@ float3 SkinBRDF(lightDatas lightDat, surfaceDatas surfDat, half3 L, half3 lightC
     half NdotH = saturate(dot(lightDat.N, H));
     half NdotV = saturate(abs(dot(lightDat.N, lightDat.V)) + 1e-5);
     half NdotL = dot(lightDat.N, L);
-    half VdotH = saturate(dot(lightDat.V, H));//LoH
+    half VdotH = saturate(dot(lightDat.V, H)); //LoH
     half LdotH = saturate(dot(H, L));
     float3 radiance = saturate(NdotL) * lightCol * shadow;
 
     half wrapNoL = saturate(NdotL * 0.5 + 0.5);
     //half wrapNoL = lerp(0, 0.99, NdotL);
 
-    float3 sss = SAMPLE_TEXTURE2D(_SSSLUT, sampler_SSSLUT, float2(lerp(0.01, 0.99, wrapNoL), lerp(0.01, 0.99, curvature)));
+    float3 sss = SAMPLE_TEXTURE2D(_SSSLUT, sampler_SSSLUT,
+                                  float2(lerp(0.01, 0.99, wrapNoL), lerp(0.01, 0.99, curvature)));
 
     float3 diffuseTerm = surfDat.albedo * OneMinusReflectivityMetallicCustom(surfDat.metallic) * sss;
-#if defined(_DIFFUSE_OFF)
+    #if defined(_DIFFUSE_OFF)
     diffuseTerm = half3(0, 0, 0);
-#endif
+    #endif
 
-    float3 specularTerm = DirectBRDF_Specular(surfDat.roughness, NdotH, LdotH) * lerp(kDieletricSpec.rgb, surfDat.albedo, surfDat.metallic);// * surfDat.metallic;
+    float3 specularTerm = DirectBRDF_Specular(surfDat.roughness, NdotH, LdotH) * lerp(
+        kDieletricSpec.rgb, surfDat.albedo, surfDat.metallic); // * surfDat.metallic;
 
-#if defined(_SPECULAR_OFF)
+    #if defined(_SPECULAR_OFF)
     specularTerm = half3(0, 0, 0);
-#endif
+    #endif
 
-    return  diffuseTerm * lightCol * shadow + specularTerm * radiance;
+    return diffuseTerm * lightCol * shadow + specularTerm * radiance;
 }
 
 half3 SkinShading(lightDatas lightDat, surfaceDatas surfDat, float3 positionWS, float4 shadowCoord, float curvature)
 {
-
-
     half3 directLighting = (half3)0;
-#if defined(_MAIN_LIGHT_SHADOWS_SCREEN) && !defined(_SURFACE_TYPE_TRANSPARENT)
+    #if defined(_MAIN_LIGHT_SHADOWS_SCREEN) && !defined(_SURFACE_TYPE_TRANSPARENT)
     float4 positionCS = TransformWorldToHClip(positionWS);
     shadowCoord = ComputeScreenPos(positionCS);
-#else
+    #else
     shadowCoord = TransformWorldToShadowCoord(positionWS);
-#endif
+    #endif
     half4 shadowMask = (half4)1.0;
 
 
@@ -235,9 +242,9 @@ half3 SkinShading(lightDatas lightDat, surfaceDatas surfDat, float3 positionWS, 
     half3 directLighting_AddLight = (half3)0;
 
     uint pixelLightCount = 0;
-#ifdef _ADDITIONAL_LIGHTS
+    #ifdef _ADDITIONAL_LIGHTS
     pixelLightCount = GetAdditionalLightsCount();
-#endif
+    #endif
     if (surfDat.mask > 0.5)
     {
         //main light
@@ -247,24 +254,24 @@ half3 SkinShading(lightDatas lightDat, surfaceDatas surfDat, float3 positionWS, 
             half3 L = light.direction;
             half3 lightColor = light.color;
             //SSAO
-#if defined(_SCREEN_SPACE_OCCLUSION)
+            #if defined(_SCREEN_SPACE_OCCLUSION)
             AmbientOcclusionFactor aoFactor = GetScreenSpaceAmbientOcclusion(lightDat.screenUV);
             lightColor *= aoFactor.directAmbientOcclusion;
-#endif
+            #endif
             half shadow = light.shadowAttenuation;
             directLighting_MainLight = SkinBRDF(lightDat, surfDat, L, lightColor, shadow, curvature);
         }
 
 
         UNITY_LOOP
-            for (uint lightIndex = 0; lightIndex < pixelLightCount; lightIndex++)
-            {
-                Light light = GetAdditionalLight(lightIndex, positionWS, shadowMask);
-                half3 L = light.direction;
-                half3 lightColor = light.color;
-                half shadow = light.shadowAttenuation * light.distanceAttenuation;
-                directLighting_AddLight += SkinBRDF(lightDat, surfDat, L, lightColor, shadow, curvature);
-            }
+        for (uint lightIndex = 0; lightIndex < pixelLightCount; lightIndex++)
+        {
+            Light light = GetAdditionalLight(lightIndex, positionWS, shadowMask);
+            half3 L = light.direction;
+            half3 lightColor = light.color;
+            half shadow = light.shadowAttenuation * light.distanceAttenuation;
+            directLighting_AddLight += SkinBRDF(lightDat, surfDat, L, lightColor, shadow, curvature);
+        }
         return directLighting_MainLight + directLighting_AddLight;
     }
     else
@@ -276,23 +283,23 @@ half3 SkinShading(lightDatas lightDat, surfaceDatas surfDat, float3 positionWS, 
             half3 L = light.direction;
             half3 lightColor = light.color;
             //SSAO
-#if defined(_SCREEN_SPACE_OCCLUSION)
+            #if defined(_SCREEN_SPACE_OCCLUSION)
             AmbientOcclusionFactor aoFactor = GetScreenSpaceAmbientOcclusion(lightDat.screenUV);
             lightColor *= aoFactor.directAmbientOcclusion;
-#endif
+            #endif
             half shadow = light.shadowAttenuation;
             directLighting_MainLight = standardBRDF(lightDat, surfDat, L, lightColor, shadow);
         }
 
         UNITY_LOOP
-            for (uint lightIndex = 0; lightIndex < pixelLightCount; lightIndex++)
-            {
-                Light light = GetAdditionalLight(lightIndex, positionWS, shadowMask);
-                half3 L = light.direction;
-                half3 lightColor = light.color;
-                half shadow = light.shadowAttenuation * light.distanceAttenuation;
-                directLighting_AddLight += standardBRDF(lightDat, surfDat, L, lightColor, shadow);
-            }
+        for (uint lightIndex = 0; lightIndex < pixelLightCount; lightIndex++)
+        {
+            Light light = GetAdditionalLight(lightIndex, positionWS, shadowMask);
+            half3 L = light.direction;
+            half3 lightColor = light.color;
+            half shadow = light.shadowAttenuation * light.distanceAttenuation;
+            directLighting_AddLight += standardBRDF(lightDat, surfDat, L, lightColor, shadow);
+        }
         return directLighting_MainLight + directLighting_AddLight;
     }
 
@@ -303,8 +310,8 @@ half3 EnvBRDFApprox(half3 SpecularColor, half Roughness, half NoV)
 {
     // [ Lazarov 2013, "Getting More Physical in Call of Duty: Black Ops II" ]
     // Adaptation to fit our G term.
-    const half4 c0 = { -1, -0.0275, -0.572, 0.022 };
-    const half4 c1 = { 1, 0.0425, 1.04, -0.04 };
+    const half4 c0 = {-1, -0.0275, -0.572, 0.022};
+    const half4 c1 = {1, 0.0425, 1.04, -0.04};
     half4 r = Roughness * c0 + c1;
     half a004 = min(r.x * r.x, exp2(-9.28 * NoV)) * r.x + r.y;
     half2 AB = half2(-1.04, 1.04) * a004 + r.zw;
@@ -318,7 +325,7 @@ half3 EnvBRDFApprox(half3 SpecularColor, half Roughness, half NoV)
 
 half3 EnvBRDF(lightDatas litDat, surfaceDatas surfDat, float envRotation, float3 positionWS)
 {
-    half NoV = saturate(abs(dot(litDat.N, litDat.V)) + 1e-5);//Çø·ÖÕý·´Ãæ
+    half NoV = saturate(abs(dot(litDat.N, litDat.V)) + 1e-5); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     half3 R = reflect(-litDat.V, litDat.N);
     R = Common.RotateDirection(R, envRotation);
 
@@ -326,23 +333,23 @@ half3 EnvBRDF(lightDatas litDat, surfaceDatas surfDat, float envRotation, float3
     float3 diffuseAO = GTAOMultiBounce(surfDat.occlusion, surfDat.albedo);
     float3 radianceSH = SampleSH(litDat.N);
     float3 indirectDiffuseTerm = radianceSH * surfDat.albedo * diffuseAO;
-#if defined(_SH_OFF)
+    #if defined(_SH_OFF)
     indirectDiffuseTerm = half3(0, 0, 0);
-#endif
+    #endif
 
     //IBL
     //The Split Sum: 1nd Stage
     half3 specularLD = GlossyEnvironmentReflection(R, positionWS, surfDat.roughness, surfDat.occlusion);
     //The Split Sum: 2nd Stage
     half3 specularDFG = EnvBRDFApprox(surfDat.specular, surfDat.roughness, NoV);
-    //AO ´¦ÀíÂ©¹â
+    //AO ï¿½ï¿½ï¿½ï¿½Â©ï¿½ï¿½
     float specularOcclusion = GetSpecularOcclusionFromAmbientOcclusion(NoV, surfDat.occlusion, surfDat.roughness);
     float3 specularAO = GTAOMultiBounce(specularOcclusion, surfDat.specular);
 
     float3 indirectSpecularTerm = specularLD * specularDFG * specularAO;
-#if defined(_IBL_OFF)
+    #if defined(_IBL_OFF)
     indirectSpecularTerm = half3(0, 0, 0);
-#endif
+    #endif
     return indirectDiffuseTerm + indirectSpecularTerm;
 }
 
@@ -355,7 +362,8 @@ half3 EnvShading(lightDatas litDat, surfaceDatas surfDat, float envRotation, flo
     return inDirectLighting;
 }
 
-half4 StandardLit(inout lightDatas lightDat, surfaceDatas surfDat, float3 positionWS, float4 shadowCoord, float envRotation, float curvature)
+half4 StandardLit(inout lightDatas lightDat, surfaceDatas surfDat, float3 positionWS, float4 shadowCoord,
+                  float envRotation, float curvature)
 {
     float3 albedo = surfDat.albedo;
     surfDat.albedo = lerp(surfDat.albedo, float3(0.0, 0.0, 0.0), surfDat.metallic);
@@ -364,10 +372,10 @@ half4 StandardLit(inout lightDatas lightDat, surfaceDatas surfDat, float3 positi
     lightDat.N = normalize(mul(surfDat.normalTS, TBN));
 
     //SSAO
-#if defined(_SCREEN_SPACE_OCCLUSION)
+    #if defined(_SCREEN_SPACE_OCCLUSION)
     AmbientOcclusionFactor aoFactor = GetScreenSpaceAmbientOcclusion(lightDat.screenUV);
     surfDat.occlusion = min(surfDat.occlusion, aoFactor.indirectAmbientOcclusion);
-#endif
+    #endif
 
     //DirectLighting
     half3 directLighting = SkinShading(lightDat, surfDat, positionWS, shadowCoord, curvature);

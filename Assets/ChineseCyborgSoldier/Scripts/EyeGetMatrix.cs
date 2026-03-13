@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 namespace ChineseCyborgWarrior
 {
     [ExecuteInEditMode]
@@ -10,28 +11,26 @@ namespace ChineseCyborgWarrior
         public Transform head;
         private Dictionary<int, Material> mats;
         public Shader targetShader;
+
         private void Awake()
         {
             mats = new Dictionary<int, Material>();
 
             rend = GetComponent<Renderer>();
-            for(int i = 0;i<rend.materials.Length;  i++)
+            for (int i = 0; i < rend.materials.Length; i++)
             {
                 if (rend.materials[i].shader.name == "Custom/Eye")
                 {
                     //Debug.Log("Found Mat");
                     mats.Add(i, rend.materials[i]);
                 }
-                    
-
             }
         }
-        
+
         private void SetMatParams(Material mat, int index)
         {
             if (mat == null)
             {
-
                 return;
             }
 
@@ -43,9 +42,8 @@ namespace ChineseCyborgWarrior
 
         void Update()
         {
-            foreach(var item in mats)
+            foreach (var item in mats)
                 SetMatParams(item.Value, item.Key);
         }
     }
-
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class targetplayer : MonoBehaviour
 {
-    private static Transform cachedPlayer; 
+    private static Transform cachedPlayer;
 
     [SerializeField] private Transform player;
     [SerializeField] private float moveSpeed = 4f;
@@ -29,12 +29,10 @@ public class targetplayer : MonoBehaviour
             transform.LookAt(player);
             transform.position += transform.forward * moveSpeed * Time.deltaTime;
         }
-        
     }
 
     private void TryAssignPlayer()
     {
-        
         if (cachedPlayer == null)
         {
             GameObject p = GameObject.FindWithTag("Player");
@@ -43,6 +41,4 @@ public class targetplayer : MonoBehaviour
 
         player = cachedPlayer;
     }
-
 }
-

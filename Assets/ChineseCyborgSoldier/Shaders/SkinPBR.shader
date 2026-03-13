@@ -3,10 +3,10 @@ Shader "Custom/SkinPBR"
     Properties
     {
         [MainTexture] _BaseMap("Albedo", 2D) = "white" {}
-        [MainColor] _BaseColor("Color", Color) = (1,1,1,1)        
+        [MainColor] _BaseColor("Color", Color) = (1,1,1,1)
 
         _SSSLUT("SSS LUT", 2D) = "white"{}
-        _Mask("SSS Mask Map", 2D) = "white"{}        
+        _Mask("SSS Mask Map", 2D) = "white"{}
 
         _CurvatureMap("CurvatureMap", 2D) = "white"{}
         _CurvaturePow("Curvature Pow", Float) = 1.3
@@ -14,7 +14,7 @@ Shader "Custom/SkinPBR"
         _MetallicMap("Metallic Map",2D) = "white"{}
         _Metallic("Metallic", Range(0.0, 1.0)) = 0.0
 
-       
+
 
         _Normal_Map("Normal Map",2D) = "bump"{}
         _Normal("Normal",float) = 1.0
@@ -25,7 +25,7 @@ Shader "Custom/SkinPBR"
         _EmissionMap("Emission Map",2D) = "black"{}
         [HDR]_EmissionColor("Emission Color", Color) = (1,1,1,1)
 
-        
+
         _SkyBoxCubeMap("SkyBox", Cube) = ""{}
 
         _EnvRotation("EnvRotation",Range(0.0,360.0)) = 0.0
@@ -33,12 +33,12 @@ Shader "Custom/SkinPBR"
         [Toggle(_DIFFUSE_OFF)] _DIFFUSE_OFF("DIFFUSE OFF",Float) = 0.0
         [Toggle(_SPECULAR_OFF)] _SPECULAR_OFF("SPECULAR OFF",Float) = 0.0
         [Toggle(_SH_OFF)] _SH_OFF("SH OFF",Float) = 0.0
-        [Toggle(_IBL_OFF)] _IBL_OFF("IBL OFF",Float) = 0.0        
+        [Toggle(_IBL_OFF)] _IBL_OFF("IBL OFF",Float) = 0.0
     }
 
-        SubShader
-        {
-            Tags
+    SubShader
+    {
+        Tags
         {
             "RenderType" = "Opaque"
             "RenderPipeline" = "UniversalPipeline"
@@ -46,18 +46,21 @@ Shader "Custom/SkinPBR"
             "IgnoreProjector" = "True"
         }
         LOD 300
-            Pass
+        Pass
+        {
+
+            Tags
             {
+                "LightMode" = "UniversalForward"
+            }
 
-                Tags{"LightMode" = "UniversalForward"}
-                
-                ZWrite on
-                Blend One Zero
-                Cull Back
+            ZWrite on
+            Blend One Zero
+            Cull Back
 
-                HLSLPROGRAM
-                #pragma exclude_renderers gles gles3 glcore
-                #pragma target 4.5
+            HLSLPROGRAM
+            #pragma exclude_renderers gles gles3 glcore
+            #pragma target 4.5
 
             // -------------------------------------
             // Material Keywords
@@ -76,7 +79,7 @@ Shader "Custom/SkinPBR"
             #pragma multi_compile_fragment _ _REFLECTION_PROBE_BOX_PROJECTION
             #pragma multi_compile_fragment _ _SHADOWS_SOFT
             #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
-            
+
 
             //--------------------------------------
             // GPU Instancing
@@ -90,7 +93,7 @@ Shader "Custom/SkinPBR"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
             #include "Skin_PBR_Include.hlsl"
-            
+
             // NOTE: Do not ifdef the properties here as SRP batcher can not handle different layouts.
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseMap_ST;
@@ -98,19 +101,25 @@ Shader "Custom/SkinPBR"
                 half _Metallic;
                 half _Roughness;
                 half _Normal;
-                half _OcclusionStrength;                
-                half _EnvRotation;                
+                half _OcclusionStrength;
+                half _EnvRotation;
                 float4 _EmissionColor;
                 half _CurvaturePow;
             CBUFFER_END
-            
-            TEXTURE2D(_BaseMap);         SAMPLER(sampler_BaseMap);
-            TEXTURE2D(_MetallicMap);     SAMPLER(sampler_MetallicMap);
-            
-            TEXTURE2D(_Normal_Map);       SAMPLER(sampler_Normal_Map);
-            TEXTURE2D(_OcclusionMap);    SAMPLER(sampler_OcclusionMap);
-            TEXTURE2D(_EmissionMap);     SAMPLER(sampler_EmissionMap);
-            TEXTURE2D(_CurvatureMap);    SAMPLER(sampler_CurvatureMap);
+
+            TEXTURE2D(_BaseMap);
+            SAMPLER(sampler_BaseMap);
+            TEXTURE2D(_MetallicMap);
+            SAMPLER(sampler_MetallicMap);
+
+            TEXTURE2D(_Normal_Map);
+            SAMPLER(sampler_Normal_Map);
+            TEXTURE2D(_OcclusionMap);
+            SAMPLER(sampler_OcclusionMap);
+            TEXTURE2D(_EmissionMap);
+            SAMPLER(sampler_EmissionMap);
+            TEXTURE2D(_CurvatureMap);
+            SAMPLER(sampler_CurvatureMap);
 
             TEXTURE2D(_CameraOpaqueTexture);
             SAMPLER(sampler_CameraOpaqueTexture);
@@ -121,25 +130,25 @@ Shader "Custom/SkinPBR"
             TEXTURECUBE(_SkyBoxCubeMap);
             SAMPLER(sampler_SkyBoxCubeMap);
 
-            
+
             struct Attributes
             {
-                float4 positionOS   : POSITION;
-                float3 normalOS     : NORMAL;
-                float4 tangentOS    : TANGENT;
-                float2 texcoord     : TEXCOORD0;
+                float4 positionOS : POSITION;
+                float3 normalOS : NORMAL;
+                float4 tangentOS : TANGENT;
+                float2 texcoord : TEXCOORD0;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct Varyings
             {
-                float2 uv           : TEXCOORD0;
-                float4 positionOS   : TEXCOORD1;
-                float3 positionWS   : TEXCOORD2;
-                float3 normalWS     : TEXCOORD3;
-                half4  tangentWS    : TEXCOORD4;    // xyz: tangent, w: sign
-                float4 shadowCoord  : TEXCOORD5;
-                float4 positionCS   : SV_POSITION;                
+                float2 uv : TEXCOORD0;
+                float4 positionOS : TEXCOORD1;
+                float3 positionWS : TEXCOORD2;
+                float3 normalWS : TEXCOORD3;
+                half4 tangentWS : TEXCOORD4; // xyz: tangent, w: sign
+                float4 shadowCoord : TEXCOORD5;
+                float4 positionCS : SV_POSITION;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -170,7 +179,6 @@ Shader "Custom/SkinPBR"
                 return o;
             }
 
-            
 
             void LightDataInitialization(Varyings i, out lightDatas o)
             {
@@ -194,17 +202,17 @@ Shader "Custom/SkinPBR"
                 o.alpha = 1;
 
                 o.specular = (half3)0;
-                
+
 
                 //metallic & roughness
                 half metallic = SAMPLE_TEXTURE2D(_MetallicMap, sampler_MetallicMap, i.uv).r * _Metallic;
                 o.metallic = saturate(metallic);
                 /*half roughness = SAMPLE_TEXTURE2D(_RoughnessMap, sampler_RoughnessMap, i.uv).r * _Roughness;
                 o.roughness = max(saturate(roughness), 0.001f);*/
-                half smoothness= SAMPLE_TEXTURE2D(_MetallicMap, sampler_MetallicMap, i.uv).a * _Metallic;
-                
-                o.roughness = max(saturate((1 - smoothness)* (1 - smoothness)), 0.001f);
-                
+                half smoothness = SAMPLE_TEXTURE2D(_MetallicMap, sampler_MetallicMap, i.uv).a * _Metallic;
+
+                o.roughness = max(saturate((1 - smoothness) * (1 - smoothness)), 0.001f);
+
 
                 //normalTS (tangent Space)
                 float4 normalTS = SAMPLE_TEXTURE2D(_Normal_Map, sampler_Normal_Map, i.uv);
@@ -229,18 +237,22 @@ Shader "Custom/SkinPBR"
 
                 float curvature = SAMPLE_TEXTURE2D(_CurvatureMap, sampler_CurvatureMap, i.uv);
                 curvature = pow(curvature, _CurvaturePow);
-                float4 litRes = StandardLit(_lightDatas, _surfaceDatas, i.positionWS, i.shadowCoord, _EnvRotation, curvature) + float4(_EmissionColor * SAMPLE_TEXTURE2D(_EmissionMap, sampler_EmissionMap, i.uv).xyz, 1);
+                float4 litRes = StandardLit(_lightDatas, _surfaceDatas, i.positionWS, i.shadowCoord, _EnvRotation,
+                          curvature) + float4(
+                    _EmissionColor * SAMPLE_TEXTURE2D(_EmissionMap, sampler_EmissionMap, i.uv).xyz, 1);
 
                 return litRes;
-            }                        
-
+            }
             ENDHLSL
         }
 
         Pass
         {
             Name "ShadowCaster"
-            Tags{"LightMode" = "ShadowCaster"}
+            Tags
+            {
+                "LightMode" = "ShadowCaster"
+            }
 
             ZWrite On
             ZTest LEqual
@@ -278,7 +290,10 @@ Shader "Custom/SkinPBR"
         Pass
         {
             Name "DepthOnly"
-            Tags{"LightMode" = "DepthOnly"}
+            Tags
+            {
+                "LightMode" = "DepthOnly"
+            }
 
             ZWrite On
             ColorMask 0
@@ -306,21 +321,24 @@ Shader "Custom/SkinPBR"
             ENDHLSL
         }
 
-            // This pass is used when drawing to a _CameraNormalsTexture texture
-            Pass
+        // This pass is used when drawing to a _CameraNormalsTexture texture
+        Pass
+        {
+            Name "DepthNormals"
+            Tags
             {
-                Name "DepthNormals"
-                Tags{"LightMode" = "DepthNormals"}
+                "LightMode" = "DepthNormals"
+            }
 
-                ZWrite On
-                Cull[_Cull]
+            ZWrite On
+            Cull[_Cull]
 
-                HLSLPROGRAM
-                #pragma exclude_renderers gles gles3 glcore
-                #pragma target 4.5
+            HLSLPROGRAM
+            #pragma exclude_renderers gles gles3 glcore
+            #pragma target 4.5
 
-                #pragma vertex DepthNormalsVertex
-                #pragma fragment DepthNormalsFragment
+            #pragma vertex DepthNormalsVertex
+            #pragma fragment DepthNormalsFragment
 
             // -------------------------------------
             // Material Keywords
@@ -339,5 +357,5 @@ Shader "Custom/SkinPBR"
             #include "Packages/com.unity.render-pipelines.universal/Shaders/LitDepthNormalsPass.hlsl"
             ENDHLSL
         }
-        }
+    }
 }
