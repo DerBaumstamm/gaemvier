@@ -6,14 +6,19 @@ public class Enemy : MonoBehaviour
 {
     public UnityEvent<int> onHealthChanged;
     [SerializeField] private GameObject uiPrefab;
-    [SerializeField] public int health = 10;
-    
+    [SerializeField] private int troopCount = 5;
+
+    public int TroopCount
+    {
+        get => troopCount;
+        set => troopCount = value;
+    }
 
     void Awake()
     {
         onHealthChanged = new UnityEvent<int>();
         CreateUI();
-        onHealthChanged.Invoke(health);
+        onHealthChanged.Invoke(troopCount);
     }
 
     private void CreateUI()
