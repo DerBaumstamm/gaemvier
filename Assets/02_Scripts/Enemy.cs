@@ -11,7 +11,14 @@ public class Enemy : MonoBehaviour
     public int TroopCount
     {
         get => troopCount;
-        set => troopCount = value;
+        set
+        {
+            if (troopCount != value)
+            {
+                troopCount = value;
+                onHealthChanged?.Invoke(troopCount);
+            }
+        }
     }
 
     void Awake()
