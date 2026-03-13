@@ -9,13 +9,14 @@ public class EventCollision : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
+        //gate collision
         print($"Collision detected with: {collision.gameObject.name}");
         if (collision.gameObject.CompareTag("Enemy"))
         {
             Enemy enemyData = collision.gameObject.GetComponent<Enemy>();
-            int index = enemyData.enemyIndex;
+            int health = enemyData.TroopCount;
 
-            Debug.Log($"Enemy Index: {index}");
+            Debug.Log($"Enemy health: {health}");
             OnEnemyCollision?.Invoke();
             Debug.Log("Spieler hat Enemy getroffen!");
         }
@@ -38,7 +39,7 @@ public class EventCollision : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
             Enemy enemyData = collision.gameObject.GetComponent<Enemy>();
-            int health = enemyData.health;
+            int health = enemyData.TroopCount;
 
             Debug.Log($"Enemy health: {health}");
             OnEnemyCollision?.Invoke();

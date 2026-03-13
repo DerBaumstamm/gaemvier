@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour
     public UnityEvent<int> onHealthChanged;
     [SerializeField] private GameObject uiPrefab;
     [SerializeField] private int troopCount = 5;
-    public int health;
+
 
     public int TroopCount
     {
@@ -26,6 +26,7 @@ public class Enemy : MonoBehaviour
     {
         onHealthChanged = new UnityEvent<int>();
         CreateUI();
+        uiPrefab.transform.rotation = Quaternion.Euler(0, -90f, 0);
         onHealthChanged.Invoke(troopCount);
     }
 

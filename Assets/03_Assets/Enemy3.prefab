@@ -159,7 +159,7 @@ MonoBehaviour:
       m_Calls: []
   uiPrefab: {fileID: 1876016818750666583, guid: f25c0cb3d90684d45803ca7859b15b9c, type: 3}
   troopCount: 5
-  enemyIndex: 0
+  health: 0
 --- !u!114 &2472964568979292112
 MonoBehaviour:
   m_ObjectHideFlags: 0
