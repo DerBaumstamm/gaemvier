@@ -1,5 +1,7 @@
+using System.Security;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class Multiplikator : MonoBehaviour
 {
@@ -8,6 +10,7 @@ public class Multiplikator : MonoBehaviour
     [SerializeField] private Enemy enemy;
     //[SerializeField] private GateEventPublisher publisher;
     [SerializeField] private int troopCount = 10;
+    [SerializeField] private TextMeshPro troopCountText;
 
     public int TroopCount => player != null ? player.TroopCount : troopCount;
 
@@ -27,6 +30,8 @@ public class Multiplikator : MonoBehaviour
         {
             troopCount = player.TroopCount;
         }
+        troopCountText = GetComponentInChildren<TextMeshPro>();
+        troopCountText.text = troopCount.ToString();
     }
 
     private void OnEnable()
@@ -85,11 +90,13 @@ public class Multiplikator : MonoBehaviour
         }
 
         troopCount = player.TroopCount;
+        troopCountText.text = troopCount.ToString();
         Debug.Log($"Gate collision detected. {currentTroops} {op} {value} = {player.TroopCount}");
     }
 
     private void HandleEnemyCollision()
     {
+        troopCountText.text = troopCount.ToString();
         print($"Player: {player.TroopCount}, Enemy: {enemy.TroopCount}");
         if (enemy.TroopCount > player.TroopCount)
         {

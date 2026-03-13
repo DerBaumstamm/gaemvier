@@ -1,7 +1,18 @@
 using UnityEngine;
+using TMPro;
+using System.Runtime.CompilerServices;
 
 public class GateInfo : MonoBehaviour
+{
+    public int value;
+    public string op; 
+    private TextMeshPro textMesh;
+    void Start()
     {
-        public int value;
-        public string op;
+        textMesh = GetComponentInChildren<TextMeshPro>();
+        if (textMesh != null)
+        {
+            textMesh.text = $"{op} {value}";
+        }
     }
+}
