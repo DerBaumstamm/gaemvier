@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1.5}
+  m_AnchoredPosition: {x: 0, y: 2.59}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &7583963030608883860
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -196,6 +196,7 @@ GameObject:
   - component: {fileID: 2245168896521578120}
   - component: {fileID: 4075886697223427247}
   - component: {fileID: 3376204372070359261}
+  - component: {fileID: 3183843653895467120}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -348,3 +349,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0519f61624f79e945a5965b5f3b47c9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EventCollision
+--- !u!114 &3183843653895467120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8295816066480641336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 942ab5cbd813c4e0d8d66017112a8bde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Multiplikator
+  eventCollision: {fileID: 0}
+  player: {fileID: 0}
+  enemy: {fileID: 0}
+  troopCount: 10
+  troopCountText: {fileID: 0}
